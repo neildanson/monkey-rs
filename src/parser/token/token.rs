@@ -25,12 +25,22 @@ pub enum TokenType {
     SLASH,
     LT,
     GT,
+
+    IF,
+    ELSE,
+    RETURN,
+
+    TRUE,
+    FALSE,
+
+    EQ,
+    NOTEQ,
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Token {
-    token_type: TokenType,
-    literal: String,
+    pub token_type: TokenType,
+    pub literal: String,
 }
 
 impl Token {

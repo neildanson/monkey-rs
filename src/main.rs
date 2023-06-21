@@ -1,3 +1,5 @@
+use monkey_rs::repl::repl::start;
+
 fn main() {
-    println!("Hello, world!");
+    start();
 }

@@ -13,7 +13,6 @@ impl Expression {
     pub fn token_literal(&self) -> String {
         match self {
             Expression::Identifier(identifier) => identifier.token.literal.clone(),
-            _ => "".to_string(),
         }
     }
 }
@@ -30,7 +29,6 @@ impl Statement {
     pub fn token_literal(&self) -> String {
         match self {
             Statement::LetStatement { token, .. } => token.literal.clone(),
-            _ => "".to_string(),
         }
     }
 }

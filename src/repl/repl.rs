@@ -1,9 +1,6 @@
 use std::io::{self, Write};
 
-use crate::parser::{
-    lexer::lexer::Lexer,
-    token::token::{Token, TokenType},
-};
+use crate::parser::{lexer::lexer::Lexer, token::token::TokenType};
 
 const PROMPT: &str = ">> ";
 fn print_and_flush(s: &str) {
@@ -12,7 +9,9 @@ fn print_and_flush(s: &str) {
 }
 
 pub fn start() {
-    //loop {
+    println!("Welcome to Monkeylang");
+    println!("#####################");
+    println!("");
     loop {
         print_and_flush(PROMPT);
         for line in std::io::stdin().lines().take(1) {
@@ -20,7 +19,10 @@ pub fn start() {
             loop {
                 let token = lexer.next_token();
                 match token.token_type {
-                    TokenType::EOF => break,
+                    TokenType::EOF => {
+                        println!("{:?}", token);
+                        break;
+                    }
                     _ => {
                         println!("{:?}", token);
                     }

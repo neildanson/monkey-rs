@@ -1,5 +1,3 @@
-use monkey_rs::repl::repl::start;
-
 fn main() {
-    start();
+    monkey_rs::repl::start();
 }

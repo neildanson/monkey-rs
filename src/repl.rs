@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-use crate::parser::{lexer::lexer::Lexer, token::token::TokenType};
+use crate::{lexer::Lexer, token::TokenType};
 
 const PROMPT: &str = ">> ";
 fn print_and_flush(s: &str) {

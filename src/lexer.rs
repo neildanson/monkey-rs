@@ -1,4 +1,4 @@
-use crate::parser::token::token::{Token, TokenType};
+use crate::token::{Token, TokenType};
 
 pub struct Lexer {
     input: String,

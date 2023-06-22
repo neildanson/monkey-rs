@@ -1,4 +1,4 @@
-use crate::parser::token::token::Token;
+use crate::token::Token;
 
 pub struct Identifier {
     token: Token,

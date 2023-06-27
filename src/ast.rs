@@ -12,7 +12,7 @@ pub enum Expression {
 impl Expression {
     pub fn token_literal(&self) -> String {
         match self {
-            Expression::Identifier(identifier) => identifier.token.literal.clone(),
+            Expression::Identifier(identifier) => identifier.token.identifier().clone(),
         }
     }
 }
@@ -28,7 +28,7 @@ pub enum Statement {
 impl Statement {
     pub fn token_literal(&self) -> String {
         match self {
-            Statement::LetStatement { token, .. } => token.literal.clone(),
+            Statement::LetStatement { token, .. } => token.identifier().clone(),
         }
     }
 }
@@ -48,7 +48,7 @@ impl Node {
 }
 
 pub struct Program {
-    statements: Vec<Statement>,
+    pub statements: Vec<Statement>,
 }
 
 impl Program {

@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-use crate::{lexer::Lexer, token::TokenType};
+use crate::{lexer::Lexer, token::Token};
 
 const PROMPT: &str = ">> ";
 fn print_and_flush(s: &str) {
@@ -18,8 +18,8 @@ pub fn start() {
             let mut lexer = Lexer::new(line.unwrap()); //Remove unwrap
             loop {
                 let token = lexer.next_token();
-                match token.token_type {
-                    TokenType::EOF => {
+                match token {
+                    Token::EOF => {
                         println!("{:?}", token);
                         break;
                     }

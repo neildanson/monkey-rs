@@ -24,6 +24,32 @@ impl Parser {
     }
 
     fn parse_program(&mut self) -> Option<Program> {
-        None
+        let program = Program::new(Vec::new());
+
+        Some(program)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+    #[test]
+    fn test_let_statements() {
+        let input = "let x = 5; let y = 10; let foobar = 838383;";
+        let lexer = Lexer::new(input.to_string());
+        let mut parser = Parser::new(lexer);
+
+        let program = parser.parse_program();
+        if let Some(program) = program {
+            if program.statements.len() != 3 {
+                panic!(
+                    "program.statements does not contain 3 statements. Got={}",
+                    program.statements.len()
+                );
+            }
+        } else {
+            panic!("ParseProgram() returned nil")
+        }
     }
 }

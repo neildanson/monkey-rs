@@ -135,6 +135,18 @@ impl Lexer {
     }
 }
 
+impl Iterator for Lexer {
+    type Item = Token;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let next = self.next_token();
+        match next {
+            Token::EOF => None,
+            _ => Some(next),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
 

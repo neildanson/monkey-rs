@@ -2,7 +2,7 @@ use crate::token::Token;
 
 pub struct Identifier<'a> {
     token: Token<'a>,
-    value: String,
+    value: &'a str,
 }
 
 pub enum Expression<'a> {
@@ -10,7 +10,7 @@ pub enum Expression<'a> {
 }
 
 impl<'a> Expression<'a> {
-    pub fn token_literal(&self) -> String {
+    pub fn token_literal(&self) -> &'a str {
         match self {
             Expression::Identifier(identifier) => identifier.token.identifier().clone(),
         }
@@ -26,7 +26,7 @@ pub enum Statement<'a> {
 }
 
 impl<'a> Statement<'a> {
-    pub fn token_literal(&self) -> String {
+    pub fn token_literal(&self) -> &'a str {
         match self {
             Statement::LetStatement { token, .. } => token.identifier().clone(),
         }
@@ -39,7 +39,7 @@ pub enum Node<'a> {
 }
 
 impl<'a> Node<'a> {
-    pub fn token_literal(&self) -> String {
+    pub fn token_literal(&self) -> &'a str {
         match self {
             Node::Expression(expression) => expression.token_literal(),
             Node::Statement(statement) => statement.token_literal(),
@@ -56,11 +56,11 @@ impl<'a> Program<'a> {
         Program { statements }
     }
 
-    pub fn token_literal(&self) -> String {
+    pub fn token_literal(&self) -> &'a str {
         if self.statements.len() > 0 {
             self.statements[0].token_literal()
         } else {
-            "".to_string()
+            ""
         }
     }
 }

@@ -38,7 +38,7 @@ pub enum Token<'a> {
 }
 
 impl<'a> Token<'a> {
-    pub fn identifier(&self) -> String {
+    pub fn identifier(&self) -> &'a str {
         todo!();
     }
 

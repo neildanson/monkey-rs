@@ -1,14 +1,14 @@
 use crate::token::Token;
 
-pub struct Lexer {
-    input: String,
+pub struct Lexer<'a> {
+    input: &'a str,
     position: usize,
     read_position: usize,
     ch: Option<char>,
 }
 
-impl Lexer {
-    pub fn new(input: String) -> Self {
+impl<'a> Lexer<'a> {
+    pub fn new(input: &'a str) -> Self {
         let mut lexer = Lexer {
             input,
             position: 0,
@@ -135,7 +135,7 @@ impl Lexer {
     }
 }
 
-impl Iterator for Lexer {
+impl<'a> Iterator for Lexer<'a> {
     type Item = Token;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -149,13 +149,29 @@ impl Iterator for Lexer {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
+
+    #[test]
+    fn test_iter() {
+        let input = "1,2,3;";
+        let expected = vec![
+            Token::INT("1".to_string()),
+            Token::COMMA,
+            Token::INT("2".to_string()),
+            Token::COMMA,
+            Token::INT("3".to_string()),
+            Token::SEMICOLON,
+        ];
+        let lex = Lexer::new(input);
+        let result = lex.collect::<Vec<Token>>();
+        assert_eq!(expected, result);
+    }
+
     #[test]
     fn test_next_token_int() {
         let input = "xyz";
         let expected = vec![Token::IDENT("xyz".to_string())];
-        let mut lexer = super::Lexer::new(input.to_string());
+        let mut lexer = super::Lexer::new(input);
 
         for token in expected.iter() {
             let next_token = lexer.next_token();
@@ -177,7 +193,7 @@ mod tests {
             Token::SEMICOLON,
             Token::EOF,
         ];
-        let mut lexer = super::Lexer::new(input.to_string());
+        let mut lexer = super::Lexer::new(input);
 
         for token in expected.iter() {
             let next_token = lexer.next_token();
@@ -194,7 +210,7 @@ let add = fn(x, y) {\
      x + y;\
 }; 
 let result = add(five, ten);";
-        let mut lexer = super::Lexer::new(monkey_example.to_string());
+        let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
             Token::IDENT("five".to_string()),
@@ -251,7 +267,7 @@ let add = fn(x, y) {\
 };\
 let result = add(five, ten);\
 !-/*5; 5 < 10 > 5;";
-        let mut lexer = super::Lexer::new(monkey_example.to_string());
+        let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
             Token::IDENT("five".to_string()),
@@ -325,7 +341,7 @@ if (5 < 10) {\
 } else { \
     return false;\
 }";
-        let mut lexer = super::Lexer::new(monkey_example.to_string());
+        let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
             Token::IDENT("five".to_string()),
@@ -419,7 +435,7 @@ if (5 < 10) {\
 10 == 10;
 10 != 9;
 ";
-        let mut lexer = super::Lexer::new(monkey_example.to_string());
+        let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
             Token::IDENT("five".to_string()),

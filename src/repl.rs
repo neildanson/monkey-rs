@@ -1,6 +1,9 @@
 use std::io::{self, Write};
 
-use crate::{lexer::Lexer, token::Token};
+use crate::{
+    lexer::{self, Lexer},
+    token::Token,
+};
 
 const PROMPT: &str = ">> ";
 fn print_and_flush(s: &str) {
@@ -15,19 +18,19 @@ pub fn start() {
     loop {
         print_and_flush(PROMPT);
         for line in std::io::stdin().lines().take(1) {
-            let mut lexer = Lexer::new(line.unwrap()); //Remove unwrap
-            loop {
-                let token = lexer.next_token();
-                match token {
-                    Token::EOF => {
-                        println!("{:?}", token);
-                        break;
-                    }
-                    _ => {
-                        println!("{:?}", token);
+            line.iter().for_each(|line| {
+                let lexer = Lexer::new(line);
+                for token in lexer {
+                    match token {
+                        Token::EOF => {
+                            println!("{:?}", token);
+                        }
+                        _ => {
+                            println!("{:?}", token);
+                        }
                     }
                 }
-            }
+            });
 
             break;
         }

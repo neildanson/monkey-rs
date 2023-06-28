@@ -1,13 +1,13 @@
 use crate::{ast::Program, lexer::Lexer, token::Token};
 
-pub struct Parser {
-    lexer: Lexer,
+pub struct Parser<'a> {
+    lexer: Lexer<'a>,
     current_token: Option<Token>,
     peek_token: Option<Token>,
 }
 
-impl Parser {
-    pub fn new(lexer: Lexer) -> Self {
+impl<'a> Parser<'a> {
+    pub fn new(lexer: Lexer<'a>) -> Self {
         let mut parser = Parser {
             lexer,
             current_token: None,
@@ -37,7 +37,7 @@ mod tests {
     #[test]
     fn test_let_statements() {
         let input = "let x = 5; let y = 10; let foobar = 838383;";
-        let lexer = Lexer::new(input.to_string());
+        let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
 
         let program = parser.parse_program();

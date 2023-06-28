@@ -30,11 +30,7 @@ impl<'a> Lexer<'a> {
     }
 
     fn peek_char(&mut self) -> Option<char> {
-        if self.read_position >= self.input.len() {
-            None
-        } else {
-            self.input.chars().nth(self.read_position)
-        }
+        self.input.chars().nth(self.read_position)
     }
 
     fn is_letter(ch: Option<char>) -> bool {
@@ -54,7 +50,7 @@ impl<'a> Lexer<'a> {
         while Self::is_letter(self.ch) {
             self.read_char();
         }
-        return &self.input[position..self.position];
+        &self.input[position..self.position]
     }
 
     fn read_number(&mut self) -> &'a str {
@@ -62,7 +58,7 @@ impl<'a> Lexer<'a> {
         while Self::is_digit(self.ch) {
             self.read_char();
         }
-        return &self.input[position..self.position];
+        &self.input[position..self.position]
     }
 
     fn skip_whitespace(&mut self) {

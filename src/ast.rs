@@ -57,10 +57,10 @@ impl<'a> Program<'a> {
     }
 
     pub fn token_literal(&self) -> &'a str {
-        if self.statements.len() > 0 {
-            self.statements[0].token_literal()
-        } else {
-            ""
-        }
+        self.statements
+            .iter()
+            .nth(0)
+            .map(|s| s.token_literal())
+            .unwrap_or("")
     }
 }

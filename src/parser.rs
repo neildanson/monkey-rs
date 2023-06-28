@@ -23,16 +23,14 @@ impl<'a> Parser<'a> {
         self.peek_token = Some(self.lexer.next_token());
     }
 
-    fn parse_program(&mut self) -> Option<Program> {
+    pub fn parse_program(&mut self) -> Program {
         let program = Program::new(Vec::new());
-
-        Some(program)
+        program
     }
 }
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
     #[test]
     fn test_let_statements() {
@@ -41,15 +39,11 @@ mod tests {
         let mut parser = Parser::new(lexer);
 
         let program = parser.parse_program();
-        if let Some(program) = program {
-            if program.statements.len() != 3 {
-                panic!(
-                    "program.statements does not contain 3 statements. Got={}",
-                    program.statements.len()
-                );
-            }
-        } else {
-            panic!("ParseProgram() returned nil")
+        if program.statements.len() != 3 {
+            panic!(
+                "program.statements does not contain 3 statements. Got={}",
+                program.statements.len()
+            );
         }
     }
 }

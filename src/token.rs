@@ -1,9 +1,9 @@
 #[derive(Debug, PartialEq, Clone)]
-pub enum Token {
+pub enum Token<'a> {
     ILLEGAL,
     EOF,
-    IDENT(String),
-    INT(String),
+    IDENT(&'a str),
+    INT(&'a str),
 
     ASSIGN,
     PLUS,
@@ -37,7 +37,7 @@ pub enum Token {
     NOTEQ,
 }
 
-impl Token {
+impl<'a> Token<'a> {
     pub fn identifier(&self) -> String {
         todo!();
     }
@@ -46,8 +46,8 @@ impl Token {
         match self {
             Token::ILLEGAL => "ILLEGAL",
             Token::EOF => "EOF",
-            Token::IDENT(value) => value,
-            Token::INT(value) => value,
+            Token::IDENT(value) => *value,
+            Token::INT(value) => *value,
             Token::ASSIGN => "=",
             Token::PLUS => "+",
             Token::MINUS => "-",

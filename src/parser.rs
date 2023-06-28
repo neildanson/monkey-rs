@@ -2,8 +2,8 @@ use crate::{ast::Program, lexer::Lexer, token::Token};
 
 pub struct Parser<'a> {
     lexer: Lexer<'a>,
-    current_token: Option<Token>,
-    peek_token: Option<Token>,
+    current_token: Option<Token<'a>>,
+    peek_token: Option<Token<'a>>,
 }
 
 impl<'a> Parser<'a> {

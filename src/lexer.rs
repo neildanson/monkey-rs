@@ -49,20 +49,20 @@ impl<'a> Lexer<'a> {
         ch.map(|c| c.is_numeric()).unwrap_or(false)
     }
 
-    fn read_identifier(&mut self) -> String {
+    fn read_identifier(&mut self) -> &'a str {
         let position = self.position;
         while Self::is_letter(self.ch) {
             self.read_char();
         }
-        return self.input[position..self.position].to_string();
+        return &self.input[position..self.position];
     }
 
-    fn read_number(&mut self) -> String {
+    fn read_number(&mut self) -> &'a str {
         let position = self.position;
         while Self::is_digit(self.ch) {
             self.read_char();
         }
-        return self.input[position..self.position].to_string();
+        return &self.input[position..self.position];
     }
 
     fn skip_whitespace(&mut self) {
@@ -80,12 +80,12 @@ impl<'a> Lexer<'a> {
             "return" => Token::RETURN,
             "true" => Token::TRUE,
             "false" => Token::FALSE,
-            ident => Token::IDENT(ident.to_string()),
+            ident => Token::IDENT(ident),
         }
     }
 
     //TODO Seems vaguely Iterable?
-    pub fn next_token(&mut self) -> Token {
+    pub fn next_token(&mut self) -> Token<'a> {
         self.skip_whitespace();
         let tok = match self.ch {
             Some('=') => {
@@ -136,7 +136,7 @@ impl<'a> Lexer<'a> {
 }
 
 impl<'a> Iterator for Lexer<'a> {
-    type Item = Token;
+    type Item = Token<'a>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let next = self.next_token();
@@ -155,11 +155,11 @@ mod tests {
     fn test_iter() {
         let input = "1,2,3;";
         let expected = vec![
-            Token::INT("1".to_string()),
+            Token::INT("1"),
             Token::COMMA,
-            Token::INT("2".to_string()),
+            Token::INT("2"),
             Token::COMMA,
-            Token::INT("3".to_string()),
+            Token::INT("3"),
             Token::SEMICOLON,
         ];
         let lex = Lexer::new(input);
@@ -170,7 +170,7 @@ mod tests {
     #[test]
     fn test_next_token_int() {
         let input = "xyz";
-        let expected = vec![Token::IDENT("xyz".to_string())];
+        let expected = vec![Token::IDENT("xyz")];
         let mut lexer = super::Lexer::new(input);
 
         for token in expected.iter() {
@@ -213,39 +213,39 @@ let result = add(five, ten);";
         let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::ASSIGN,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::ASSIGN,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::ASSIGN,
             Token::FUNCTION,
             Token::LPAREN,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::COMMA,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::RPAREN,
             Token::LBRACE,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::PLUS,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::SEMICOLON,
             Token::RBRACE,
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("result".to_string()),
+            Token::IDENT("result"),
             Token::ASSIGN,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::LPAREN,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::COMMA,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::RPAREN,
             Token::SEMICOLON,
             Token::EOF,
@@ -270,52 +270,52 @@ let result = add(five, ten);\
         let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::ASSIGN,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::ASSIGN,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::ASSIGN,
             Token::FUNCTION,
             Token::LPAREN,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::COMMA,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::RPAREN,
             Token::LBRACE,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::PLUS,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::SEMICOLON,
             Token::RBRACE,
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("result".to_string()),
+            Token::IDENT("result"),
             Token::ASSIGN,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::LPAREN,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::COMMA,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::RPAREN,
             Token::SEMICOLON,
             Token::BANG,
             Token::MINUS,
             Token::SLASH,
             Token::ASTERISK,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::LT,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::GT,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::EOF,
         ];
@@ -344,58 +344,58 @@ if (5 < 10) {\
         let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::ASSIGN,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::ASSIGN,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::ASSIGN,
             Token::FUNCTION,
             Token::LPAREN,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::COMMA,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::RPAREN,
             Token::LBRACE,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::PLUS,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::SEMICOLON,
             Token::RBRACE,
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("result".to_string()),
+            Token::IDENT("result"),
             Token::ASSIGN,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::LPAREN,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::COMMA,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::RPAREN,
             Token::SEMICOLON,
             Token::BANG,
             Token::MINUS,
             Token::SLASH,
             Token::ASTERISK,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::LT,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::GT,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::IF,
             Token::LPAREN,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::LT,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::RPAREN,
             Token::LBRACE,
             Token::RETURN,
@@ -438,58 +438,58 @@ if (5 < 10) {\
         let mut lexer = super::Lexer::new(monkey_example);
         let expected = vec![
             Token::LET,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::ASSIGN,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::ASSIGN,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::ASSIGN,
             Token::FUNCTION,
             Token::LPAREN,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::COMMA,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::RPAREN,
             Token::LBRACE,
-            Token::IDENT("x".to_string()),
+            Token::IDENT("x"),
             Token::PLUS,
-            Token::IDENT("y".to_string()),
+            Token::IDENT("y"),
             Token::SEMICOLON,
             Token::RBRACE,
             Token::SEMICOLON,
             Token::LET,
-            Token::IDENT("result".to_string()),
+            Token::IDENT("result"),
             Token::ASSIGN,
-            Token::IDENT("add".to_string()),
+            Token::IDENT("add"),
             Token::LPAREN,
-            Token::IDENT("five".to_string()),
+            Token::IDENT("five"),
             Token::COMMA,
-            Token::IDENT("ten".to_string()),
+            Token::IDENT("ten"),
             Token::RPAREN,
             Token::SEMICOLON,
             Token::BANG,
             Token::MINUS,
             Token::SLASH,
             Token::ASTERISK,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::LT,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::GT,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::SEMICOLON,
             Token::IF,
             Token::LPAREN,
-            Token::INT("5".to_string()),
+            Token::INT("5"),
             Token::LT,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::RPAREN,
             Token::LBRACE,
             Token::RETURN,
@@ -502,13 +502,13 @@ if (5 < 10) {\
             Token::FALSE,
             Token::SEMICOLON,
             Token::RBRACE,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::EQ,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::SEMICOLON,
-            Token::INT("10".to_string()),
+            Token::INT("10"),
             Token::NOTEQ,
-            Token::INT("9".to_string()),
+            Token::INT("9"),
             Token::SEMICOLON,
             Token::EOF,
         ];

@@ -1,15 +1,15 @@
 use crate::token::Token;
 
-pub struct Identifier {
-    token: Token,
+pub struct Identifier<'a> {
+    token: Token<'a>,
     value: String,
 }
 
-pub enum Expression {
-    Identifier(Identifier),
+pub enum Expression<'a> {
+    Identifier(Identifier<'a>),
 }
 
-impl Expression {
+impl<'a> Expression<'a> {
     pub fn token_literal(&self) -> String {
         match self {
             Expression::Identifier(identifier) => identifier.token.identifier().clone(),
@@ -17,15 +17,15 @@ impl Expression {
     }
 }
 
-pub enum Statement {
+pub enum Statement<'a> {
     LetStatement {
-        token: Token,
-        name: Identifier,
-        value: Expression,
+        token: Token<'a>,
+        name: Identifier<'a>,
+        value: Expression<'a>,
     },
 }
 
-impl Statement {
+impl<'a> Statement<'a> {
     pub fn token_literal(&self) -> String {
         match self {
             Statement::LetStatement { token, .. } => token.identifier().clone(),
@@ -33,12 +33,12 @@ impl Statement {
     }
 }
 
-pub enum Node {
-    Expression(Expression),
-    Statement(Statement),
+pub enum Node<'a> {
+    Expression(Expression<'a>),
+    Statement(Statement<'a>),
 }
 
-impl Node {
+impl<'a> Node<'a> {
     pub fn token_literal(&self) -> String {
         match self {
             Node::Expression(expression) => expression.token_literal(),
@@ -47,11 +47,11 @@ impl Node {
     }
 }
 
-pub struct Program {
-    pub statements: Vec<Statement>,
+pub struct Program<'a> {
+    pub statements: Vec<Statement<'a>>,
 }
 
-impl Program {
+impl<'a> Program<'a> {
     pub fn new(statements: Vec<Statement>) -> Program {
         Program { statements }
     }
